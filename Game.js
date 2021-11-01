@@ -40,12 +40,6 @@ function Bear() {
             this.y = h - ih; 
     }; 
     
-    this.move = function(xDir, yDir) {
-        this.fitBounds(); //we add this instruction to keep bear within board
-        this.x += this.dBear * xDir;
-        this.y += this.dBear * yDir; 
-        this.display(); 
-    };
 }
 
 function start() {
@@ -60,6 +54,7 @@ function start() {
     bees = new Array(); 
     //create bees 
     makeBees();
+    updateBees();
 
     //take start time 
     lastStingTime = new Date();
@@ -105,7 +100,32 @@ class Bee {
             this.y += dy;
             this.display();
         };
+        this.display = function() { 
+            //adjust position of bee and display it 
+            this.fitBounds();
+            this.htmlElement.style.left = this.x + "px"; 
+            this.htmlElement.style.top = this.y + "px"; 
+            this.htmlElement.style.display = "block"; 
+        }; 
+        
+        this.fitBounds = function() { 
+            //check and make sure the bees stays in the board space 
+            let parent = this.htmlElement.parentElement; 
+            let iw = this.htmlElement.offsetWidth; 
+            let ih = this.htmlElement.offsetHeight; 
+            let l = parent.offsetLeft; 
+            let t = parent.offsetTop; 
+            let w = parent.offsetWidth; 
+            let h = parent.offsetHeight; 
+            if (this.x < 0) this.x = 0; 
+            if (this.x > w - iw) this.x = w - iw; 
+            if (this.y < 0) this.y = 0; if (this.y > h - ih) this.y = h - ih; 
+        }; 
     }
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
 }
 
 function createBeeImg(wNum) {
@@ -154,10 +174,6 @@ function makeBees() {
         bees.push(bee); //add the bee object to the bees array 
         i++; 
     }
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
 }
 
 function moveBees() {
