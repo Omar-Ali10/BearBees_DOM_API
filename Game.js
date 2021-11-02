@@ -245,3 +245,7 @@ function isHit(defender, offender) {
         document.getElementById("duration").innerHTML = longestDuration;
     } 
 }
+
+function restart() {
+    window.addEventListener('click',()=>{ location.reload()})
+}
